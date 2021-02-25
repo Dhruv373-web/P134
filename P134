@@ -1,0 +1,48 @@
+import pandas 
+import matplotlib.pyplot as plt
+import csv
+
+rows = []
+
+with open("main.csv", "r") as f:
+  csvreader = csv.reader(f)
+  for row in csvreader: 
+    rows.append(row)
+
+headers = rows[0]
+planet_data_rows = rows[1:]
+print(headers)
+print(planet_data_rows[0])
+speed_planet_count = 0
+for key, value in final_dict.items():
+  if "speed" in value:
+    speed_planet_count += 1
+
+print(speed_planet_count)
+final_dict = {}
+
+for index, planet_data in enumerate(planet_data_rows):
+  features_list = []
+  gravity = (float(planet_data[3])*5.972e+24) / (float(planet_data[7])*float(planet_data[7])*6371000*6371000) * 6.674e-11
+  try:
+    if gravity < 100:
+      features_list.append("gravity")
+  except: pass
+  try:
+    if planet_data[6].lower() == "terrestrial" or planet_data[6].lower() == "super earth":
+      features_list.append("planet_type")
+  except: pass
+  try:
+    if planet_data[8] > 0.38 or planet_data[8] < 2:
+      features_list.append("goldilock")
+  except: pass
+  try:
+    distance = 2 * 3.14 * (planet_data[8] * 1.496e+9)
+    time = planet_data[9] * 86400
+    speed = distance / time
+    if speed < 200:
+      features_list.append("speed")
+  except: pass
+  final_dict[index] = features_list
+
+print(final_dict)
